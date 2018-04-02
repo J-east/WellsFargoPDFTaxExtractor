@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Dapper.Contrib.Extensions;
 
 namespace WellsFargoPDFTaxExtractor {
     public static class DataAccess {
@@ -40,21 +41,33 @@ create table Transactions (
             }
         }
 
-        public class Transaction {
-            public int TransactionID;
-            public long accountNumber;
-            public DateTime TransDate;
-            public string Title;
-            public string Summary;
-            public string catagory;
-            public string typeOfTransaction;
-            public double amount;
+
+
+        [Table("Transactions")]
+        public class TransactionContrib {
+            [Key]
+            public int TransactionID { get; set; }
+
+            public long accountNumber { get; set; }
+            public DateTime TransDate { get; set; }
+            public string Title { get; set; }
+            public string Summary { get; set; }
+            public string catagory { get; set; }
+            public string typeOfTransaction { get; set; }
+            public double amount { get; set; }
         }
 
-        public static bool UpdateRow(Transaction t) {
-            string sql = "update TRANSACTIONS SET ???? where TransactionID = @transactionID";
+        public static bool UpdateRow(TransactionContrib t) {
+            string conStr;
+            if (Program.Settings.SqlSettings.IntegratedSec) {
+                conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};Integrated Security = SSPI;";
+            }
+            else {
+                conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};UID={Program.Settings.SqlSettings.userID};PWD={sqlpw}";
+            }
+            SqlConnection connection = new SqlConnection(conStr);
 
-            // code to take t and update the rows where things are different
+            var isSuccess = connection.Update(t);
 
             return true;
         }
@@ -62,8 +75,8 @@ create table Transactions (
         /// <summary>
         /// returns all the transactions
         /// </summary>                
-        public static List<Transaction> GetAllTransactions() {
-            List<Transaction> toRet = new List<Transaction>();
+        public static List<TransactionContrib> GetAllTransactions() {
+            List<TransactionContrib> toRet = new List<TransactionContrib>();
 
             try {
                 string conStr;
@@ -77,7 +90,7 @@ create table Transactions (
                 SqlConnection con = new SqlConnection(conStr);
                 con.Open();
 
-                IEnumerable<Transaction> resultList = con.Query<Transaction>(@"SELECT * FROM Transactions ORDER BY TransDate");
+                IEnumerable<TransactionContrib> resultList = con.Query<TransactionContrib>(@"SELECT * FROM Transactions ORDER BY TransDate");
                 return resultList.ToList();
             }
             catch {

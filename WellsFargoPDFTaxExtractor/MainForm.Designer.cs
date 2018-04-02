@@ -128,7 +128,7 @@
             this.dgTransactions.Name = "dgTransactions";
             this.dgTransactions.Size = new System.Drawing.Size(1154, 333);
             this.dgTransactions.TabIndex = 8;
-            this.dgTransactions.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTransactions_CellValueChanged);
+            this.dgTransactions.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTransactions_CellEndEdit);
             // 
             // TransactionID
             // 

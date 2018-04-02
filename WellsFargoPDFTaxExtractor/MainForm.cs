@@ -28,10 +28,10 @@ namespace WellsFargoPDFTaxExtractor {
         // rows are associated with transaction IDs, really easy, I'm keeping everything writable for ease of use, but you do you
         private void LoadTransactions() {
 
-            List<DataAccess.Transaction> transactions = DataAccess.GetAllTransactions();
+            List<DataAccess.TransactionContrib> transactions = DataAccess.GetAllTransactions();
 
 
-            foreach (DataAccess.Transaction t in transactions) {
+            foreach (DataAccess.TransactionContrib t in transactions) {
                 DataGridViewRow row = (DataGridViewRow)dgTransactions.Rows[0].Clone();
                 row.Cells[0].Value = t.TransactionID;
                 row.Cells[1].Value = t.accountNumber;
@@ -72,7 +72,7 @@ namespace WellsFargoPDFTaxExtractor {
             }
             catch { }
         }
-        
+
         private void bSetUpSql_Click(object sender, EventArgs e) {
             SqlInfoCaptureForm sqlinfo = new SqlInfoCaptureForm();
             sqlinfo.ShowDialog();
@@ -135,11 +135,22 @@ namespace WellsFargoPDFTaxExtractor {
             catch { }
         }
 
-        // update the sql and reload... because I'm lazy yeah I know it's bad, future job prospects, if you are viewing this
-        // know that I'm not usually like this, but it's an open source project and it's super fast at this point so no issue
-        // risk/reward
-        private void dgTransactions_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+        private void dgTransactions_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+            if (e.RowIndex > -1 && dgTransactions.Rows[e.RowIndex].Cells[0].Value != null) {
 
+                DataAccess.TransactionContrib t = new DataAccess.TransactionContrib {
+                    TransactionID = (int)dgTransactions.Rows[e.RowIndex].Cells[0].Value,
+                    accountNumber = (long)dgTransactions.Rows[e.RowIndex].Cells[1].Value,
+                    TransDate = (DateTime)dgTransactions.Rows[e.RowIndex].Cells[2].Value,
+                    Title = (string)dgTransactions.Rows[e.RowIndex].Cells[3].Value,
+                    Summary = (string)dgTransactions.Rows[e.RowIndex].Cells[4].Value,
+                    catagory = (string)dgTransactions.Rows[e.RowIndex].Cells[5].Value,
+                    typeOfTransaction = (string)dgTransactions.Rows[e.RowIndex].Cells[6].Value,
+                    amount = (double)dgTransactions.Rows[e.RowIndex].Cells[7].Value
+                };
+
+                DataAccess.UpdateRow(t);
+            }
         }
     }
 }
