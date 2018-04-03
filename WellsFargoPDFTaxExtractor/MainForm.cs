@@ -22,14 +22,57 @@ namespace WellsFargoPDFTaxExtractor {
         public MainForm() {
             InitializeComponent();
 
+            if (!string.IsNullOrWhiteSpace(Program.Settings.SqlSettings.server)) {
+                lblServer.Text = $"Server: {Program.Settings.SqlSettings.server}";
+                lblDB.Text = $"Database: {Program.Settings.SqlSettings.database}";
+                lblUID.Text = string.IsNullOrWhiteSpace(Program.Settings.SqlSettings.userID) ? "Integrated Security" : $"UserID: {Program.Settings.SqlSettings.userID}";
+            }
+
             LoadTransactions();
+
+            LoadTransactionOverview();
+        }
+
+
+
+        /// <summary>
+        /// typesOfTransactions:
+        ///     Personal Income
+        ///     Business Income
+        ///     Business Sales Income
+        ///     Other Income
+        ///     Gift
+        ///     Personal Spending
+        ///     Business Spending
+        /// </summary>
+        private void LoadTransactionOverview() {
+            // laziness knows no bounds
+            List<DataAccess.TransactionContrib> transactions = DataAccess.GetAllTransactions();
+
+            double businessPurchases = transactions.Any(a => a.typeOfTransaction == "Business Spending") ? transactions.Where(a => a.typeOfTransaction == "Business Spending").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double personalPurchases = transactions.Any(a => a.typeOfTransaction == "Personal Spending") ? transactions.Where(a => a.typeOfTransaction == "Personal Spending").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+
+            double personalIncome = transactions.Any(a => a.typeOfTransaction == "Personal Income") ? transactions.Where(a => a.typeOfTransaction == "Personal Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double businessIncome = transactions.Any(a => a.typeOfTransaction == "Business Income") ? transactions.Where(a => a.typeOfTransaction == "Business Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double businessSales = transactions.Any(a => a.typeOfTransaction == "Business Sales Income") ? transactions.Where(a => a.typeOfTransaction == "Business Sales Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+
+            double businessProfitLoss = (businessIncome + businessSales) - businessPurchases;
+            double personalMoney = personalIncome - personalPurchases;
+
+            double gift = transactions.Any(a => a.typeOfTransaction == "Gift") ? transactions.Where(a => a.typeOfTransaction == "Gift").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double otherIncome = transactions.Any(a => a.typeOfTransaction == "Other Income") ? transactions.Where(a => a.typeOfTransaction == "Other Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+
+            lblBusinessExpenses.Text = $"${businessPurchases}";
+            lblPersonalExpenses.Text = $"${personalPurchases}";
+            lblRawIncome.Text = $"${personalIncome + businessIncome + businessSales}";
+            lblBusinessIncome.Text = $"${businessSales + businessIncome}";
+
+            lblTaxableIncome.Text = $"${personalIncome + businessIncome + businessSales - businessPurchases}";
         }
 
         // rows are associated with transaction IDs, really easy, I'm keeping everything writable for ease of use, but you do you
         private void LoadTransactions() {
-
             List<DataAccess.TransactionContrib> transactions = DataAccess.GetAllTransactions();
-
 
             foreach (DataAccess.TransactionContrib t in transactions) {
                 DataGridViewRow row = (DataGridViewRow)dgTransactions.Rows[0].Clone();
@@ -135,6 +178,10 @@ namespace WellsFargoPDFTaxExtractor {
             catch { }
         }
 
+        private void updateTotals() {
+
+        }
+
         private void dgTransactions_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             if (e.RowIndex > -1 && dgTransactions.Rows[e.RowIndex].Cells[0].Value != null) {
 
@@ -150,7 +197,11 @@ namespace WellsFargoPDFTaxExtractor {
                 };
 
                 DataAccess.UpdateRow(t);
+
+                LoadTransactionOverview();
             }
+
+
         }
     }
 }

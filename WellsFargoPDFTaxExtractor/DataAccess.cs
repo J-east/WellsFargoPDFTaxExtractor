@@ -41,8 +41,6 @@ create table Transactions (
             }
         }
 
-
-
         [Table("Transactions")]
         public class TransactionContrib {
             [Key]

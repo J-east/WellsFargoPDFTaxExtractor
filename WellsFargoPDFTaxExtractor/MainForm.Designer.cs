@@ -39,6 +39,16 @@
             this.Catagory = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.BusinessOrPersonalTransaction = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblRawIncome = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblPersonalExpenses = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lblBusinessIncome = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lblBusinessExpenses = new System.Windows.Forms.Label();
+            this.lblTaxableIncome = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgTransactions)).BeginInit();
             this.SuspendLayout();
             // 
@@ -126,7 +136,7 @@
             this.Amount});
             this.dgTransactions.Location = new System.Drawing.Point(12, 42);
             this.dgTransactions.Name = "dgTransactions";
-            this.dgTransactions.Size = new System.Drawing.Size(1154, 333);
+            this.dgTransactions.Size = new System.Drawing.Size(1165, 356);
             this.dgTransactions.TabIndex = 8;
             this.dgTransactions.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTransactions_CellEndEdit);
             // 
@@ -190,11 +200,121 @@
             this.Amount.HeaderText = "Amount";
             this.Amount.Name = "Amount";
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 414);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Raw Income:";
+            // 
+            // lblRawIncome
+            // 
+            this.lblRawIncome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblRawIncome.AutoSize = true;
+            this.lblRawIncome.Location = new System.Drawing.Point(90, 414);
+            this.lblRawIncome.Name = "lblRawIncome";
+            this.lblRawIncome.Size = new System.Drawing.Size(34, 13);
+            this.lblRawIncome.TabIndex = 10;
+            this.lblRawIncome.Text = "$0.00";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(172, 414);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(100, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Personal Expenses:";
+            // 
+            // lblPersonalExpenses
+            // 
+            this.lblPersonalExpenses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPersonalExpenses.AutoSize = true;
+            this.lblPersonalExpenses.Location = new System.Drawing.Point(275, 414);
+            this.lblPersonalExpenses.Name = "lblPersonalExpenses";
+            this.lblPersonalExpenses.Size = new System.Drawing.Size(34, 13);
+            this.lblPersonalExpenses.TabIndex = 12;
+            this.lblPersonalExpenses.Text = "$0.00";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(343, 414);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(90, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Business Income:";
+            // 
+            // lblBusinessIncome
+            // 
+            this.lblBusinessIncome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBusinessIncome.AutoSize = true;
+            this.lblBusinessIncome.Location = new System.Drawing.Point(439, 414);
+            this.lblBusinessIncome.Name = "lblBusinessIncome";
+            this.lblBusinessIncome.Size = new System.Drawing.Size(34, 13);
+            this.lblBusinessIncome.TabIndex = 14;
+            this.lblBusinessIncome.Text = "$0.00";
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(503, 414);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(101, 13);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "Business Expenses:";
+            // 
+            // lblBusinessExpenses
+            // 
+            this.lblBusinessExpenses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBusinessExpenses.AutoSize = true;
+            this.lblBusinessExpenses.Location = new System.Drawing.Point(610, 414);
+            this.lblBusinessExpenses.Name = "lblBusinessExpenses";
+            this.lblBusinessExpenses.Size = new System.Drawing.Size(34, 13);
+            this.lblBusinessExpenses.TabIndex = 16;
+            this.lblBusinessExpenses.Text = "$0.00";
+            // 
+            // lblTaxableIncome
+            // 
+            this.lblTaxableIncome.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblTaxableIncome.AutoSize = true;
+            this.lblTaxableIncome.Location = new System.Drawing.Point(764, 414);
+            this.lblTaxableIncome.Name = "lblTaxableIncome";
+            this.lblTaxableIncome.Size = new System.Drawing.Size(34, 13);
+            this.lblTaxableIncome.TabIndex = 18;
+            this.lblTaxableIncome.Text = "$0.00";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(675, 414);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(83, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Taxable Income";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1178, 416);
+            this.ClientSize = new System.Drawing.Size(1189, 436);
+            this.Controls.Add(this.lblTaxableIncome);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.lblBusinessExpenses);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.lblBusinessIncome);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lblPersonalExpenses);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblRawIncome);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.dgTransactions);
             this.Controls.Add(this.bExtractChecking);
             this.Controls.Add(this.bExtractCreditFolder);
@@ -229,6 +349,16 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn Catagory;
         private System.Windows.Forms.DataGridViewComboBoxColumn BusinessOrPersonalTransaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn Amount;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblRawIncome;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblPersonalExpenses;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblBusinessIncome;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblBusinessExpenses;
+        private System.Windows.Forms.Label lblTaxableIncome;
+        private System.Windows.Forms.Label label10;
     }
 }
 
