@@ -49,18 +49,18 @@ namespace WellsFargoPDFTaxExtractor {
             // laziness knows no bounds
             List<DataAccess.TransactionContrib> transactions = DataAccess.GetAllTransactions();
 
-            double businessPurchases = transactions.Any(a => a.typeOfTransaction == "Business Spending") ? transactions.Where(a => a.typeOfTransaction == "Business Spending").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
-            double personalPurchases = transactions.Any(a => a.typeOfTransaction == "Personal Spending") ? transactions.Where(a => a.typeOfTransaction == "Personal Spending").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double businessPurchases = transactions.Any(a => a.TypeOfTransaction == "Business Spending") ? transactions.Where(a => a.TypeOfTransaction == "Business Spending").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+            double personalPurchases = transactions.Any(a => a.TypeOfTransaction == "Personal Spending") ? transactions.Where(a => a.TypeOfTransaction == "Personal Spending").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
 
-            double personalIncome = transactions.Any(a => a.typeOfTransaction == "Personal Income") ? transactions.Where(a => a.typeOfTransaction == "Personal Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
-            double businessIncome = transactions.Any(a => a.typeOfTransaction == "Business Income") ? transactions.Where(a => a.typeOfTransaction == "Business Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
-            double businessSales = transactions.Any(a => a.typeOfTransaction == "Business Sales Income") ? transactions.Where(a => a.typeOfTransaction == "Business Sales Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double personalIncome = transactions.Any(a => a.TypeOfTransaction == "Personal Income") ? transactions.Where(a => a.TypeOfTransaction == "Personal Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+            double businessIncome = transactions.Any(a => a.TypeOfTransaction == "Business Income") ? transactions.Where(a => a.TypeOfTransaction == "Business Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+            double businessSales = transactions.Any(a => a.TypeOfTransaction == "Business Sales Income") ? transactions.Where(a => a.TypeOfTransaction == "Business Sales Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
 
             double businessProfitLoss = (businessIncome + businessSales) - businessPurchases;
             double personalMoney = personalIncome - personalPurchases;
 
-            double gift = transactions.Any(a => a.typeOfTransaction == "Gift") ? transactions.Where(a => a.typeOfTransaction == "Gift").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
-            double otherIncome = transactions.Any(a => a.typeOfTransaction == "Other Income") ? transactions.Where(a => a.typeOfTransaction == "Other Income").Select(a => a.amount).Aggregate((a, b) => a + b) : 0;
+            double gift = transactions.Any(a => a.TypeOfTransaction == "Gift") ? transactions.Where(a => a.TypeOfTransaction == "Gift").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+            double otherIncome = transactions.Any(a => a.TypeOfTransaction == "Other Income") ? transactions.Where(a => a.TypeOfTransaction == "Other Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
 
             lblBusinessExpenses.Text = $"${businessPurchases}";
             lblPersonalExpenses.Text = $"${personalPurchases}";
@@ -77,13 +77,13 @@ namespace WellsFargoPDFTaxExtractor {
             foreach (DataAccess.TransactionContrib t in transactions) {
                 DataGridViewRow row = (DataGridViewRow)dgTransactions.Rows[0].Clone();
                 row.Cells[0].Value = t.TransactionID;
-                row.Cells[1].Value = t.accountNumber;
+                row.Cells[1].Value = t.AccountNumber;
                 row.Cells[2].Value = t.TransDate;
                 row.Cells[3].Value = t.Title;
                 row.Cells[4].Value = t.Summary;
-                row.Cells[5].Value = t.catagory;
-                row.Cells[6].Value = t.typeOfTransaction;
-                row.Cells[7].Value = t.amount;
+                row.Cells[5].Value = t.Catagory;
+                row.Cells[6].Value = t.TypeOfTransaction;
+                row.Cells[7].Value = t.Amount;
 
                 dgTransactions.Rows.Add(row);
             }
@@ -187,13 +187,13 @@ namespace WellsFargoPDFTaxExtractor {
 
                 DataAccess.TransactionContrib t = new DataAccess.TransactionContrib {
                     TransactionID = (int)dgTransactions.Rows[e.RowIndex].Cells[0].Value,
-                    accountNumber = (long)dgTransactions.Rows[e.RowIndex].Cells[1].Value,
+                    AccountNumber = (long)dgTransactions.Rows[e.RowIndex].Cells[1].Value,
                     TransDate = (DateTime)dgTransactions.Rows[e.RowIndex].Cells[2].Value,
                     Title = (string)dgTransactions.Rows[e.RowIndex].Cells[3].Value,
                     Summary = (string)dgTransactions.Rows[e.RowIndex].Cells[4].Value,
-                    catagory = (string)dgTransactions.Rows[e.RowIndex].Cells[5].Value,
-                    typeOfTransaction = (string)dgTransactions.Rows[e.RowIndex].Cells[6].Value,
-                    amount = (double)dgTransactions.Rows[e.RowIndex].Cells[7].Value
+                    Catagory = (string)dgTransactions.Rows[e.RowIndex].Cells[5].Value,
+                    TypeOfTransaction = (string)dgTransactions.Rows[e.RowIndex].Cells[6].Value,
+                    Amount = (double)dgTransactions.Rows[e.RowIndex].Cells[7].Value
                 };
 
                 DataAccess.UpdateRow(t);

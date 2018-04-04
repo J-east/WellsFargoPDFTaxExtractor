@@ -23,17 +23,19 @@ namespace WellsFargoPDFTaxExtractor {
 
         // okay
         private void button1_Click(object sender, EventArgs e) {
-            SqlConnection conn;
-            if (cbIntegratedSec.Checked) {
-                conn = new SqlConnection($"SERVER={tbServer.Text};DATABASE={tbDatabase.Text};Integrated Security = SSPI;");
+            string conStr;
+            if (Program.Settings.SqlSettings.IntegratedSec) {
+                conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};Integrated Security = SSPI;";
             }
             else {
-                conn = new SqlConnection($"SERVER={tbServer.Text};DATABASE={tbDatabase.Text};UID={tbUID};PWD={tbPW}");
+                conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};UID={Program.Settings.SqlSettings.userID};PWD={tbPW}";
             }
-            try {
-                conn.Open();
+            using (SqlConnection conn = new SqlConnection(conStr)) {
+                try {
+                    conn.Open();
+                }
+                catch { MessageBox.Show("error, please try again"); return; }
             }
-            catch { MessageBox.Show("error, please try again"); return; }
 
             Program.Settings.SqlSettings.server = tbServer.Text;
             Program.Settings.SqlSettings.database = tbDatabase.Text;

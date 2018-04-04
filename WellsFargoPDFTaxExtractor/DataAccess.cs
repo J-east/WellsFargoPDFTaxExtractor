@@ -22,10 +22,10 @@ namespace WellsFargoPDFTaxExtractor {
 
 
             string sqlStr = "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'Transactions'";
-            SqlConnection con = new SqlConnection(conStr);
-            con.Open();
-            if ((int)new SqlCommand(sqlStr, con).ExecuteScalar() == 0) {
-                sqlStr = @"
+            using (SqlConnection con = new SqlConnection(conStr)) {
+                con.Open();
+                if ((int)new SqlCommand(sqlStr, con).ExecuteScalar() == 0) {
+                    sqlStr = @"
 create table Transactions (
 	TransactionID int IDENTITY (1,1) NOT NULL,
     accountNumber bigint not null,
@@ -37,7 +37,8 @@ create table Transactions (
 	amount DECIMAL(19,4) not null,
 	)
 	)";
-                new SqlCommand(sqlStr).ExecuteNonQuery();
+                    new SqlCommand(sqlStr).ExecuteNonQuery();
+                }
             }
         }
 
@@ -46,13 +47,13 @@ create table Transactions (
             [Key]
             public int TransactionID { get; set; }
 
-            public long accountNumber { get; set; }
+            public long AccountNumber { get; set; }
             public DateTime TransDate { get; set; }
             public string Title { get; set; }
             public string Summary { get; set; }
-            public string catagory { get; set; }
-            public string typeOfTransaction { get; set; }
-            public double amount { get; set; }
+            public string Catagory { get; set; }
+            public string TypeOfTransaction { get; set; }
+            public double Amount { get; set; }
         }
 
         public static bool UpdateRow(TransactionContrib t) {
@@ -63,11 +64,9 @@ create table Transactions (
             else {
                 conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};UID={Program.Settings.SqlSettings.userID};PWD={sqlpw}";
             }
-            SqlConnection connection = new SqlConnection(conStr);
-
-            var isSuccess = connection.Update(t);
-
-            return true;
+            using (SqlConnection connection = new SqlConnection(conStr)) {
+                return connection.Update(t);
+            }            
         }
 
         /// <summary>
@@ -85,11 +84,12 @@ create table Transactions (
                     conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};UID={Program.Settings.SqlSettings.userID};PWD={sqlpw}";
                 }
 
-                SqlConnection con = new SqlConnection(conStr);
-                con.Open();
+                using (SqlConnection con = new SqlConnection(conStr)) {
+                    con.Open();
+                    IEnumerable<TransactionContrib> resultList = con.Query<TransactionContrib>(@"SELECT * FROM Transactions ORDER BY TransDate");
 
-                IEnumerable<TransactionContrib> resultList = con.Query<TransactionContrib>(@"SELECT * FROM Transactions ORDER BY TransDate");
-                return resultList.ToList();
+                    return resultList.ToList();
+                }
             }
             catch {
                 return null;
@@ -108,30 +108,31 @@ create table Transactions (
                     conStr = $"SERVER={Program.Settings.SqlSettings.server};DATABASE={Program.Settings.SqlSettings.database};UID={Program.Settings.SqlSettings.userID};PWD={sqlpw}";
                 }
 
-                SqlConnection con = new SqlConnection(conStr);
-                string sql = @"SELECT COUNT(*) FROM Transactions WHERE amount = @amount AND Summary = @summary";
-                con.Open();
-                IDictionary<string, object> existingRows = con.QuerySingle(sql, new { amount = amount, summary = desc });
+                using (SqlConnection con = new SqlConnection(conStr)) {
+                    string sql = @"SELECT COUNT(*) FROM Transactions WHERE amount = @amount AND Summary = @summary";
+                    con.Open();
+                    IDictionary<string, object> existingRows = con.QuerySingle(sql, new { amount = amount, summary = desc });
 
-                if ((int)(existingRows.Values.First()) > 0) {
-                    return false;
-                }
+                    if ((int)(existingRows.Values.First()) > 0) {
+                        return false;
+                    }
 
-                sql = @"INSERT INTO Transactions 
+                    sql = @"INSERT INTO Transactions 
 (accountNumber, TransDate, Title, Summary, catagory, amount) 
 Values 
 (@accountNumber, @TransDate, @Title, @Summary, @catagory, @amount)";
 
-                var affectedRows = con.Execute(sql, new {
-                    accountNumber = accountNumber,
-                    TransDate = dateOfTransaction,
-                    Title = desc.Length > 30 ? desc.Substring(0, 30) : desc,
-                    Summary = desc,
-                    catagory = typeOfTrans,
-                    amount = amount
-                });
+                    var affectedRows = con.Execute(sql, new {
+                        accountNumber = accountNumber,
+                        TransDate = dateOfTransaction,
+                        Title = desc.Length > 30 ? desc.Substring(0, 30) : desc,
+                        Summary = desc,
+                        catagory = typeOfTrans,
+                        amount = amount
+                    });
 
-                return affectedRows == 1;
+                    return affectedRows == 1;
+                }
             }
             catch (Exception e) {
                 return false;
