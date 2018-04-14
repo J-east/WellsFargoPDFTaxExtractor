@@ -49,8 +49,15 @@
             this.lblBusinessExpenses = new System.Windows.Forms.Label();
             this.lblTaxableIncome = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             ((System.ComponentModel.ISupportInitialize)(this.dgTransactions)).BeginInit();
             this.SuspendLayout();
+            // 
+            // printDocument1
+            // 
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            this.printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.printDocument1_BeginPrint);
             // 
             // bExtractFolder
             // 
@@ -134,6 +141,7 @@
             this.Catagory,
             this.BusinessOrPersonalTransaction,
             this.Amount});
+            this.dgTransactions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dgTransactions.Location = new System.Drawing.Point(12, 42);
             this.dgTransactions.Name = "dgTransactions";
             this.dgTransactions.Size = new System.Drawing.Size(1165, 356);
@@ -300,11 +308,22 @@
             this.label10.TabIndex = 17;
             this.label10.Text = "Taxable Income";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(411, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(85, 23);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Print Data";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1189, 436);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.lblTaxableIncome);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.lblBusinessExpenses);
@@ -325,6 +344,7 @@
             this.Controls.Add(this.bExtractFolder);
             this.Name = "MainForm";
             this.Text = "Awesome Wells Fargo Extractor";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgTransactions)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -359,6 +379,8 @@
         private System.Windows.Forms.Label lblBusinessExpenses;
         private System.Windows.Forms.Label lblTaxableIncome;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button button1;
+        private System.Drawing.Printing.PrintDocument printDocument1;
     }
 }
 
