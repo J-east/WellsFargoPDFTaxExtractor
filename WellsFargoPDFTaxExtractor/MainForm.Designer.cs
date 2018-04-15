@@ -31,14 +31,6 @@
             this.bExtractCreditFolder = new System.Windows.Forms.Button();
             this.bExtractChecking = new System.Windows.Forms.Button();
             this.dgTransactions = new System.Windows.Forms.DataGridView();
-            this.TransactionID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AccountNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TransDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Summary = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Catagory = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.BusinessOrPersonalTransaction = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.lblRawIncome = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -51,13 +43,16 @@
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.TransactionID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AccountNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TransDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Summary = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Catagory = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.BusinessOrPersonalTransaction = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgTransactions)).BeginInit();
             this.SuspendLayout();
-            // 
-            // printDocument1
-            // 
-            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
-            this.printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.printDocument1_BeginPrint);
             // 
             // bExtractFolder
             // 
@@ -147,66 +142,6 @@
             this.dgTransactions.Size = new System.Drawing.Size(1165, 356);
             this.dgTransactions.TabIndex = 8;
             this.dgTransactions.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTransactions_CellEndEdit);
-            // 
-            // TransactionID
-            // 
-            this.TransactionID.HeaderText = "TransactionID";
-            this.TransactionID.Name = "TransactionID";
-            // 
-            // AccountNumber
-            // 
-            this.AccountNumber.HeaderText = "AccountNumber";
-            this.AccountNumber.Name = "AccountNumber";
-            this.AccountNumber.Width = 150;
-            // 
-            // TransDate
-            // 
-            this.TransDate.HeaderText = "TransactionDate";
-            this.TransDate.Name = "TransDate";
-            // 
-            // Title
-            // 
-            this.Title.HeaderText = "Title";
-            this.Title.Name = "Title";
-            // 
-            // Summary
-            // 
-            this.Summary.HeaderText = "Summary";
-            this.Summary.Name = "Summary";
-            this.Summary.Width = 360;
-            // 
-            // Catagory
-            // 
-            this.Catagory.HeaderText = "Catagory";
-            this.Catagory.Items.AddRange(new object[] {
-            "Payments",
-            "Purchases",
-            "deposited check",
-            "Other",
-            "online transfer",
-            "B2B ACH Debit",
-            "OtherCredits",
-            "Purchase",
-            "ATM Withdrawl"});
-            this.Catagory.Name = "Catagory";
-            // 
-            // BusinessOrPersonalTransaction
-            // 
-            this.BusinessOrPersonalTransaction.HeaderText = "Business or Personal Transaction";
-            this.BusinessOrPersonalTransaction.Items.AddRange(new object[] {
-            "Personal Income",
-            "Business Income",
-            "Business Sales Income",
-            "Other Income",
-            "Gift",
-            "Personal Spending",
-            "Business Spending"});
-            this.BusinessOrPersonalTransaction.Name = "BusinessOrPersonalTransaction";
-            // 
-            // Amount
-            // 
-            this.Amount.HeaderText = "Amount";
-            this.Amount.Name = "Amount";
             // 
             // label1
             // 
@@ -318,6 +253,74 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // printDocument1
+            // 
+            this.printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.printDocument1_BeginPrint);
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // 
+            // TransactionID
+            // 
+            this.TransactionID.HeaderText = "TransactionID";
+            this.TransactionID.Name = "TransactionID";
+            // 
+            // AccountNumber
+            // 
+            this.AccountNumber.HeaderText = "AccountNumber";
+            this.AccountNumber.Name = "AccountNumber";
+            this.AccountNumber.Width = 150;
+            // 
+            // TransDate
+            // 
+            this.TransDate.HeaderText = "TransactionDate";
+            this.TransDate.Name = "TransDate";
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Title";
+            this.Title.Name = "Title";
+            // 
+            // Summary
+            // 
+            this.Summary.HeaderText = "Summary";
+            this.Summary.Name = "Summary";
+            this.Summary.Width = 360;
+            // 
+            // Catagory
+            // 
+            this.Catagory.HeaderText = "Catagory";
+            this.Catagory.Items.AddRange(new object[] {
+            "Payments",
+            "Purchases",
+            "deposited check",
+            "",
+            "income",
+            "Withdrawl",
+            "online transfer",
+            "Expense",
+            "B2B ACH Debit",
+            "OtherCredits",
+            "Purchase",
+            "ATM Withdrawl"});
+            this.Catagory.Name = "Catagory";
+            // 
+            // BusinessOrPersonalTransaction
+            // 
+            this.BusinessOrPersonalTransaction.HeaderText = "Business or Personal Transaction";
+            this.BusinessOrPersonalTransaction.Items.AddRange(new object[] {
+            "NULL",
+            "Business Spending",
+            "Business Income",
+            "Other Income",
+            "Personal Spending",
+            "Personal Income",
+            "Gift"});
+            this.BusinessOrPersonalTransaction.Name = "BusinessOrPersonalTransaction";
+            // 
+            // Amount
+            // 
+            this.Amount.HeaderText = "Amount";
+            this.Amount.Name = "Amount";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,14 +364,6 @@
         private System.Windows.Forms.Button bExtractCreditFolder;
         private System.Windows.Forms.Button bExtractChecking;
         private System.Windows.Forms.DataGridView dgTransactions;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TransactionID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AccountNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TransDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Summary;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Catagory;
-        private System.Windows.Forms.DataGridViewComboBoxColumn BusinessOrPersonalTransaction;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Amount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblRawIncome;
         private System.Windows.Forms.Label label3;
@@ -381,6 +376,14 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button button1;
         private System.Drawing.Printing.PrintDocument printDocument1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TransactionID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AccountNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TransDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Summary;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Catagory;
+        private System.Windows.Forms.DataGridViewComboBoxColumn BusinessOrPersonalTransaction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Amount;
     }
 }
 
