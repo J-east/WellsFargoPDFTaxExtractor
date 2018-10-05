@@ -70,7 +70,7 @@ namespace WellsFargoPDFTaxExtractor {
             double personalMoney = personalIncome - personalPurchases;
 
             double gift = transactions.Any(a => a.TypeOfTransaction == "Gift") ? transactions.Where(a => a.TypeOfTransaction == "Gift").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
-            double otherIncome = transactions.Any(a => a.TypeOfTransaction == "Other Income") ? transactions.Where(a => a.TypeOfTransaction == "Other Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+            double otherIncome = transactions.Any(a => a.TypeOfTransaction == "Other Income") ? transactions.Where(a => a.TypeOfTransaction == "Other Income").Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;            
 
             lblBusinessExpenses.Text = $"${businessPurchases}";
             lblPersonalExpenses.Text = $"${personalPurchases}";
@@ -81,8 +81,9 @@ namespace WellsFargoPDFTaxExtractor {
         }
 
         // rows are associated with transaction IDs, really easy, I'm keeping everything writable for ease of use, but you do you
+        List<DataAccess.TransactionContrib> transactions;
         private void LoadTransactions() {
-            List<DataAccess.TransactionContrib> transactions = DataAccess.GetAllTransactions();
+            transactions = DataAccess.GetAllTransactions();
 
             foreach (DataAccess.TransactionContrib t in transactions) {
                 DataGridViewRow row = (DataGridViewRow)dgTransactions.Rows[0].Clone();
@@ -97,6 +98,46 @@ namespace WellsFargoPDFTaxExtractor {
 
                 dgTransactions.Rows.Add(row);
             }
+
+            try {
+                cbAccountNum.Items.Add("no filter");
+                cbTranType.Items.Add("no filter");
+                cbAccountNum.SelectedItem = "no filter";
+                cbTranType.SelectedItem = "no filter";
+                cbAccountNum.Items.AddRange(transactions.Select(a => (object)a.AccountNumber).Distinct().ToArray());
+                cbTranType.Items.AddRange(transactions.Select(a => (object)a.TypeOfTransaction?.ToString()??"").Distinct().ToArray());                
+            }
+            catch  {  }
+        }
+
+        private void FilterTransactions() {
+            try {
+                dgTransactions.Rows.Clear();
+                transactions = DataAccess.GetAllTransactions();
+                List<DataAccess.TransactionContrib> filteredTransactions = transactions;
+                if (cbAccountNum.SelectedItem.ToString() != "no filter")
+                    filteredTransactions = filteredTransactions.Where(a => a.AccountNumber.ToString() == cbAccountNum.SelectedItem.ToString()).ToList();
+                if (cbTranType.SelectedItem.ToString() != "no filter")
+                    filteredTransactions = filteredTransactions.Where(a => (a.TypeOfTransaction == null ? "" : a.TypeOfTransaction) == cbTranType.SelectedItem.ToString()).ToList();
+
+                foreach (DataAccess.TransactionContrib t in filteredTransactions) {
+                    DataGridViewRow row = (DataGridViewRow)dgTransactions.Rows[0].Clone();
+                    row.Cells[0].Value = t.TransactionID;
+                    row.Cells[1].Value = t.AccountNumber;
+                    row.Cells[2].Value = t.TransDate;
+                    row.Cells[3].Value = t.Title;
+                    row.Cells[4].Value = t.Summary;
+                    row.Cells[5].Value = t.Catagory;
+                    row.Cells[6].Value = t.TypeOfTransaction;
+                    row.Cells[7].Value = t.Amount;
+
+                    dgTransactions.Rows.Add(row);
+                }
+                
+                double amount = filteredTransactions.Any() ? filteredTransactions.Select(a => a.Amount).Aggregate((a, b) => a + b) : 0;
+                lblAmount.Text = $"${amount}";
+            }
+            catch { }
         }
 
         // select the folder and extract all the of the data from the contained pdf files
@@ -222,7 +263,7 @@ namespace WellsFargoPDFTaxExtractor {
             printDialog.UseEXDialog = true;
             //Get the document
             if (DialogResult.OK == printDialog.ShowDialog()) {
-                printDocument1.DocumentName = "Test Page Print";
+                printDocument1.DocumentName = cbTranType.SelectedItem.ToString();
                 printDocument1.Print();
             }
         }
@@ -304,9 +345,9 @@ namespace WellsFargoPDFTaxExtractor {
                     else {
                         if (bNewPage) {
                             //Draw Header
-                            e.Graphics.DrawString("Customer Summary", new Font(dgTransactions.Font, FontStyle.Bold),
+                            e.Graphics.DrawString($"{cbTranType.SelectedItem.ToString()} total: {lblAmount.Text}", new Font(dgTransactions.Font, FontStyle.Bold),
                                     Brushes.Black, e.MarginBounds.Left, e.MarginBounds.Top -
-                                    e.Graphics.MeasureString("Customer Summary", new Font(dgTransactions.Font,
+                                    e.Graphics.MeasureString($"{cbTranType.SelectedItem.ToString()} total: {lblAmount.Text}", new Font(dgTransactions.Font,
                                     FontStyle.Bold), e.MarginBounds.Width).Height - 13);
 
                             String strDate = DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToShortTimeString();
@@ -315,7 +356,7 @@ namespace WellsFargoPDFTaxExtractor {
                                     Brushes.Black, e.MarginBounds.Left + (e.MarginBounds.Width -
                                     e.Graphics.MeasureString(strDate, new Font(dgTransactions.Font,
                                     FontStyle.Bold), e.MarginBounds.Width).Width), e.MarginBounds.Top -
-                                    e.Graphics.MeasureString("Customer Summary", new Font(new Font(dgTransactions.Font,
+                                    e.Graphics.MeasureString($"{cbTranType.SelectedItem.ToString()} total: {lblAmount.Text}", new Font(new Font(dgTransactions.Font,
                                     FontStyle.Bold), FontStyle.Bold), e.MarginBounds.Width).Height - 13);
 
                             //Draw Columns                 
@@ -367,6 +408,14 @@ namespace WellsFargoPDFTaxExtractor {
             catch (Exception exc) {
                 MessageBox.Show(exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void cbAccountNum_SelectedIndexChanged(object sender, EventArgs e) {
+            FilterTransactions();
+        }
+
+        private void cbTranType_SelectedIndexChanged(object sender, EventArgs e) {
+            FilterTransactions();
         }
     }
 }

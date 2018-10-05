@@ -73,8 +73,6 @@ create table Transactions (
         /// returns all the transactions
         /// </summary>                
         public static List<TransactionContrib> GetAllTransactions() {
-            List<TransactionContrib> toRet = new List<TransactionContrib>();
-
             try {
                 string conStr;
                 if (Program.Settings.SqlSettings.IntegratedSec) {
@@ -94,8 +92,6 @@ create table Transactions (
             catch {
                 return null;
             }
-
-            return toRet;
         }
 
         public static bool CheckAndInsertTransaction(long accountNumber, DateTime dateOfTransaction, string typeOfTrans, string desc, double amount) {
